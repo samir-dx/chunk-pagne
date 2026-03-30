@@ -2,40 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="style.css">  <style>
-    /* Shadcn-like variables */
-    :root {
-      --background: 0 0% 100%;
-      --foreground: 240 10% 3.9%;
-      --card: 0 0% 100%;
-      --border: 240 5.9% 90%;
-      --primary: 171 77% 35%; /* Teal 600 */
-    }
-    .dark {
-      --background: 240 10% 3.9%;
-      --foreground: 0 0% 98%;
-      --card: 240 10% 3.9%;
-      --border: 240 3.7% 15.9%;
-      --primary: 171 77% 45%; /* Teal 500 */
-    }
-    body {
-      background-color: hsl(var(--background));
-      color: hsl(var(--foreground));
-      width: 350px;
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-    }
-    .border-custom { border-color: hsl(var(--border)); }
-    .chunk-pill {
-      background-color: transparent;
-      border: 1px solid hsl(var(--border));
-      transition: all 0.2s;
-      border-radius: 40px;
-      padding: 4px 6px;
-      line-height: 1;
-    }
-    .chunk-pill:hover { border-color: hsl(var(--primary)); color: hsl(var(--primary)); }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body class="p-4">
   <header class="flex items-center justify-between mb-4 pb-3 border-b">
@@ -44,23 +11,43 @@
       <h1 class="text-sm font-semibold tracking-tight text-teal-600 dark:text-teal-400">Network Chunks</h1>
     </div>
     <button id="theme-toggle" class="btn-icon">
-      <svg id="theme-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        </svg>
+      <svg id="theme-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg>
     </button>
   </header>
-  <div id="newly-added">
-    
-  </div>
-  <div class="scroll-container mb-4">
-    <div id="list" class="flex flex-wrap gap-2">
-      </div>
+
+  <div id="empty-state" class="hidden">
+    <p class="text-zinc-400 text-xs italic w-full text-center py-8">No chunks captured for this origin</p>
   </div>
 
-  <div class="flex gap-2">
+  <div id="newly-added-container" class="hidden mb-4">
+    <div class="flex items-center justify-between mb-2">
+      <p class="text-[10px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider flex items-center gap-1">
+        <span class="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse"></span>
+        Newly Added (<span id="new-count">0</span>)
+      </p>
+      <button id="copy-new" class="btn-icon text-teal-600 dark:text-teal-400" title="Copy Newly Added">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+      </button>
+    </div>
+    <div class="scroll-container min-h-[60px] max-h-[140px]">
+      <div id="new-list" class="flex flex-wrap gap-2"></div>
+    </div>
+  </div>
+
+  <div id="history-container" class="hidden mb-4">
+    <p class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-2">
+      History (<span id="history-count">0</span>)
+    </p>
+    <div class="scroll-container max-h-[140px]">
+      <div id="history-list" class="flex flex-wrap gap-2"></div>
+    </div>
+  </div>
+
+  <div class="flex gap-2 mt-4 pt-3 border-t border-custom">
     <button id="copy" class="btn-primary flex-1">Copy All</button>
     <button id="clear" class="btn-outline flex-1">Clear</button>
   </div>
 
   <script src="popup.js"></script>
 </body>
-</html> 
+</html>

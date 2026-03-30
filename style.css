@@ -1,4 +1,4 @@
-/* Shadcn Variables */
+/* --- Shadcn Variables --- */
 :root {
   --background: 0 0% 100%;
   --foreground: 240 10% 3.9%;
@@ -14,24 +14,37 @@
   --primary: 171 77% 45%; /* Teal 500 */
 }
 
-/* Scrollable Container */
+/* --- Scrollable Container --- */
 .scroll-container {
   height: 200px; /* Fixed height for scrolling */
   overflow-y: auto;
   border: 1px solid hsl(var(--border));
   border-radius: 6px;
-  padding: 12px;
+  padding: 10px;
   background-color: transparent;
 }
-
-/* Custom Scrollbar (Minimalist) */
-.scroll-container::-webkit-scrollbar { width: 5px; }
+.scroll-container::-webkit-scrollbar { width: 4px; }
 .scroll-container::-webkit-scrollbar-thumb { 
   background: hsl(var(--border)); 
   border-radius: 10px; 
 }
 
-/* Shadcn Button Styling */
+/* --- Component Styling --- */
+.chunk-pill {
+  background-color: transparent;
+  border: 1px solid hsl(var(--border));
+  transition: all 0.2s;
+  border-radius: 40px;
+  padding: 4px 6px;
+  line-height: 1;
+  font-family: monospace;
+  font-size: 10px;
+}
+.chunk-pill:hover { 
+  border-color: hsl(var(--primary)); 
+  color: hsl(var(--primary)); 
+}
+
 .btn-primary {
   background-color: #0d9488; /* Teal 600 */
   color: white;
@@ -47,7 +60,6 @@
   border: none;
   cursor: pointer;
 }
-
 .btn-primary:hover { background-color: #0f766e; opacity: 0.9; }
 .btn-primary:active { transform: scale(0.98); }
 
@@ -63,49 +75,104 @@
   transition: all 0.2s;
   cursor: pointer;
 }
-
 .btn-outline:hover { background-color: #f4f4f5; }
 .dark .btn-outline:hover { background-color: #27272a; }
 
 .btn-icon { 
-    background-color: transparent; 
-    border: none; color: var(--header-text); 
-    cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center;
-    border-radius: 4px; opacity: 0.8; transition: 0.2s;
+  background-color: transparent; 
+  border: none; 
+  color: hsl(var(--foreground)); 
+  cursor: pointer; 
+  padding: 4px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  border-radius: 4px; 
+  opacity: 0.8; 
+  transition: 0.2s;
 }
-.btn-icon:hover { opacity: 1;  }
+.btn-icon:hover { opacity: 1; background-color: #f4f4f5; }
+.dark .btn-icon:hover { background-color: #27272a; }
 .btn-icon svg { width: 18px; height: 18px; }
 
-.btn-icon:hover { background-color: #f4f4f5; }
-.dark .btn-icon:hover { background-color: #27272a; }
+.logo-icon { width: 20px; height: 20px; }
+#list { gap: 4px 8px; }
 
-#list {
-    gap: 4px 8px;
-}
 
-.logo-icon {
-    width: 20px;
-    height: 20px;
-}
+/* =========================================
+   TAILWIND UTILITY CLASSES (Mocked)
+   ========================================= */
 
-/* Utilities used in HTML */
+/* Layout & Flexbox */
 .flex { display: flex; }
 .flex-wrap { flex-wrap: wrap; }
-.gap-2 { gap: 8px; }
 .flex-1 { flex: 1; }
-.p-4 { padding: 16px; }
-.mb-4 { margin-bottom: 16px; }
-.justify-between { justify-content: space-between; }
 .items-center { align-items: center; }
-.border-b { border-bottom: 1px solid hsl(var(--border)); }
-.pb-3 { padding-bottom: 12px; }
-.text-sm { font-size: 14px; }
-.font-semibold { font-weight: 600; }
-.hidden { display: none; }
-.w-4 {
-    width: 16px;
-}
-.h-4 {
-    height: 16px;
-}
+.justify-between { justify-content: space-between; }
+.w-full { width: 100%; }
 
+/* Spacing (Margin & Padding) */
+.p-4 { padding: 16px; }
+.pt-3 { padding-top: 12px; }
+.pb-3 { padding-bottom: 12px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-4 { margin-bottom: 16px; }
+.mt-4 { margin-top: 16px; }
+.gap-1 { gap: 4px; }
+.gap-2 { gap: 8px; }
+
+/* Dimensions */
+.w-1\.5 { width: 6px; } /* escaped period */
+.h-1\.5 { height: 6px; }
+.w-3\.5 { width: 14px; }
+.h-3\.5 { height: 14px; }
+.w-4 { width: 16px; }
+.h-4 { height: 16px; }
+.min-h-\[60px\] { min-height: 60px; } /* escaped brackets */
+.max-h-\[140px\] { max-height: 140px; }
+
+/* Typography */
+.text-xs { font-size: 12px; }
+.text-sm { font-size: 14px; }
+.text-\[10px\] { font-size: 10px; } /* escaped brackets */
+.font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+.italic { font-style: italic; }
+.uppercase { text-transform: uppercase; }
+.tracking-wider { letter-spacing: 0.05em; }
+.text-center { text-align: center; }
+
+/* Borders & Radius */
+.border-b { border-bottom: 1px solid hsl(var(--border)); }
+.border-t { border-top: 1px solid hsl(var(--border)); }
+.border-custom { border-color: hsl(var(--border)); }
+.rounded-full { border-radius: 9999px; }
+
+/* Opacity */
+.opacity-70 { opacity: 0.7; }
+.opacity-80 { opacity: 0.8; }
+
+/* Visibility */
+.hidden { display: none !important; }
+
+/* Custom Colors & Themes */
+.text-teal-600 { color: #0d9488; }
+.text-zinc-400 { color: #a1a1aa; }
+.bg-teal-500 { background-color: #14b8a6; }
+
+/* The specific pill classes injected by popup.js */
+.border-teal-500\/50 { border-color: rgba(20, 184, 166, 0.5); }
+.bg-teal-50\/50 { background-color: rgba(240, 253, 250, 0.5); }
+
+/* Dark Mode Overrides */
+.dark .dark\:text-teal-400 { color: #2dd4bf; }
+.dark .dark\:bg-teal-900\/20 { background-color: rgba(19, 78, 74, 0.2); }
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.animate-pulse { 
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; 
+}
