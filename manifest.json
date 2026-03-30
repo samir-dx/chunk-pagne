@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Spy Network Chunks",
+  "name": "Track Network Chunks",
   "version": "3.0",
   "description": "Tracks Next.js chunks from Sprinklr network traffic",
   "permissions": [
