@@ -29,7 +29,7 @@ body {
   border: 1px solid hsl(var(--border));
   border-radius: 6px;
   padding: 10px;
-  background-color: transparent;
+  background-color: #e3e3e840;
 }
 .scroll-container::-webkit-scrollbar { width: 4px; }
 .scroll-container::-webkit-scrollbar-thumb { 
@@ -37,9 +37,13 @@ body {
   border-radius: 10px; 
 }
 
+.dark .scroll-container {
+  background-color: #ffffff12;
+}
+
 /* --- Component Styling --- */
 .chunk-pill {
-  background-color: transparent;
+  background-color: hsl(var(--background));
   border: 1px solid hsl(var(--border));
   transition: all 0.2s;
   border-radius: 40px;
@@ -54,7 +58,7 @@ body {
 }
 
 .btn-primary {
-  background-color: #0d9488; /* Teal 600 */
+  background-color: #1D7671; /* Teal 600 */
   color: white;
   display: inline-flex;
   align-items: center;
@@ -151,8 +155,12 @@ body {
 .text-center { text-align: center; }
 
 /* Borders & Radius */
-.border-b { border-bottom: 1px solid hsl(var(--border)); }
-.border-t { border-top: 1px solid hsl(var(--border)); }
+.divider {
+  width: calc(100% + 32px);
+  margin: 0 -16px;
+  height: 1px;
+  background-color: hsl(var(--border));
+}
 .border-custom { border-color: hsl(var(--border)); }
 .rounded-full { border-radius: 9999px; }
 
@@ -164,7 +172,7 @@ body {
 .hidden { display: none !important; }
 
 /* Custom Colors & Themes */
-.text-teal-600 { color: #0d9488; }
+.text-teal-600 { color: #1D7671; }
 .text-zinc-400 { color: #a1a1aa; }
 .bg-teal-500 { background-color: #14b8a6; }
 
@@ -173,7 +181,7 @@ body {
 .bg-teal-50\/50 { background-color: rgba(240, 253, 250, 0.5); }
 
 /* Dark Mode Overrides */
-.dark .dark\:text-teal-400 { color: #2dd4bf; }
+.dark .dark\:text-teal-400 { color: #0d9488; }
 .dark .dark\:bg-teal-900\/20 { background-color: rgba(19, 78, 74, 0.2); }
 
 /* Animations */
