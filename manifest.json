@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Spy Network Chunks",
+  "version": "3.0",
+  "description": "Tracks Next.js chunks from Sprinklr network traffic",
+  "permissions": [
+    "webRequest", 
+    "storage",
+    "tabs",
+    "webNavigation" 
+  ],
+  "host_permissions": [
+    "*://*.sprinklr.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "32": "icons/logo-32.png",
+      "48": "icons/logo-48.png",
+      "128": "icons/logo-128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

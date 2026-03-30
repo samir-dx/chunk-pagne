@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">  <style>
+    /* Shadcn-like variables */
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 240 10% 3.9%;
+      --card: 0 0% 100%;
+      --border: 240 5.9% 90%;
+      --primary: 171 77% 35%; /* Teal 600 */
+    }
+    .dark {
+      --background: 240 10% 3.9%;
+      --foreground: 0 0% 98%;
+      --card: 240 10% 3.9%;
+      --border: 240 3.7% 15.9%;
+      --primary: 171 77% 45%; /* Teal 500 */
+    }
+    body {
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+      width: 350px;
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+    }
+    .border-custom { border-color: hsl(var(--border)); }
+    .chunk-pill {
+      background-color: transparent;
+      border: 1px solid hsl(var(--border));
+      transition: all 0.2s;
+      border-radius: 40px;
+      padding: 4px 6px;
+      line-height: 1;
+    }
+    .chunk-pill:hover { border-color: hsl(var(--primary)); color: hsl(var(--primary)); }
+  </style>
+</head>
+<body class="p-4">
+  <header class="flex items-center justify-between mb-4 pb-3 border-b">
+    <div class="flex items-center gap-2">
+      <img src="https://raw.githubusercontent.com/samir-dx/store/refs/heads/main/images/chunks-logo.png" class="logo-icon" alt="logo">
+      <h1 class="text-sm font-semibold tracking-tight text-teal-600 dark:text-teal-400">Network Chunks</h1>
+    </div>
+    <button id="theme-toggle" class="btn-icon">
+      <svg id="theme-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        </svg>
+    </button>
+  </header>
+  <div id="newly-added">
+    
+  </div>
+  <div class="scroll-container mb-4">
+    <div id="list" class="flex flex-wrap gap-2">
+      </div>
+  </div>
+
+  <div class="flex gap-2">
+    <button id="copy" class="btn-primary flex-1">Copy All</button>
+    <button id="clear" class="btn-outline flex-1">Clear</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html> 
