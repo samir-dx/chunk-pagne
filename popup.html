@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="p-4">
-  <header class="flex items-center justify-between mb-4 pb-3">
+  <header class="flex items-center justify-between mb-4 pb-3 border-b">
     <div class="flex items-center gap-2">
       <img src="https://raw.githubusercontent.com/samir-dx/store/refs/heads/main/images/chunks-logo.png" class="logo-icon" alt="logo">
       <h1 class="text-sm font-semibold tracking-tight text-teal-600 dark:text-teal-400">Network Chunks</h1>
@@ -14,7 +14,6 @@
       <svg id="theme-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg>
     </button>
   </header>
-  <div class="divider"></div>
   <div id="empty-state" class="hidden">
     <p class="text-zinc-400 text-xs italic w-full text-center py-8">No chunks captured for this origin</p>
   </div>
@@ -41,8 +40,7 @@
       <div id="history-list" class="flex flex-wrap gap-2"></div>
     </div>
   </div>
-  <div class="divider"></div>
-  <div class="flex gap-2 mt-4 pt-3 border-custom">
+  <div class="flex gap-2 mt-4 pt-3 border-t border-custom">
     <button id="copy" class="btn-primary flex-1">Copy All</button>
     <button id="clear" class="btn-outline flex-1">Clear</button>
   </div>

@@ -155,12 +155,8 @@ body {
 .text-center { text-align: center; }
 
 /* Borders & Radius */
-.divider {
-  width: calc(100% + 32px);
-  margin: 0 -16px;
-  height: 1px;
-  background-color: hsl(var(--border));
-}
+.border-b { border-bottom: 1px solid hsl(var(--border)); }
+.border-t { border-top: 1px solid hsl(var(--border)); }
 .border-custom { border-color: hsl(var(--border)); }
 .rounded-full { border-radius: 9999px; }
 
