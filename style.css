@@ -14,6 +14,14 @@
   --primary: 171 77% 45%; /* Teal 500 */
 }
 
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  width: 350px;
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
 /* --- Scrollable Container --- */
 .scroll-container {
   height: 200px; /* Fixed height for scrolling */
