@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const iconSun = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>`;
   const iconBookmark = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>`;
   const iconActivity = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>`;
-
+  const iconCheck = `<svg class="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+  
   // --- Theme Logic ---
   const applyPopupTheme = (isDark) => {
     document.documentElement.classList.toggle('dark', isDark);
@@ -118,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navigator.clipboard.writeText(currentNewChunks.toSorted().join(',')).then(() => {
       const btn = e.currentTarget;
       const originalHTML = btn.innerHTML;
-      btn.innerHTML = `<span style="font-size:10px; font-weight:bold;">✓</span>`;
+      btn.innerHTML = iconCheck; // <-- Updated here
       setTimeout(() => btn.innerHTML = originalHTML, 1000);
     });
   };
@@ -140,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
       chrome.storage.local.set({ [GLOBAL_SAVED_KEY]: savedLists }, () => {
         const btn = e.currentTarget;
         const originalHTML = btn.innerHTML;
-        btn.innerHTML = `<span style="font-size:10px; font-weight:bold;">✓</span>`;
+        btn.innerHTML = iconCheck; // <-- Updated here
         setTimeout(() => btn.innerHTML = originalHTML, 1000);
       });
     });
@@ -213,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (targetList) {
             navigator.clipboard.writeText(targetList.chunks.join(',')).then(() => {
               const originalHTML = e.currentTarget.innerHTML;
-              e.currentTarget.innerHTML = `<span style="font-size:10px; font-weight:bold;">✓</span>`;
+              e.currentTarget.innerHTML = iconCheck; // <-- Updated here
               setTimeout(() => e.currentTarget.innerHTML = originalHTML, 1000);
             });
           }
