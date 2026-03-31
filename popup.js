@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const GLOBAL_SAVED_KEY = 'saved-chunk-lists';
   
   let sessionSeen = null; 
-  let currentNewChunks = []; 
+  let currentNewChunks = [];
+  let currentHistoryChunks = []; 
   let isSavedView = false;
 
   // Icons
@@ -29,7 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const iconSun = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>`;
   const iconBookmark = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>`;
   const iconActivity = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>`;
+  
+  // Action Icons
   const iconCheck = `<svg class="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+  const iconCopy = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>`;
+  const iconSave = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>`;
   
   // --- Theme Logic ---
   const applyPopupTheme = (isDark) => {
@@ -37,7 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
     themeIcon.innerHTML = isDark ? iconSun : iconMoon;
     chrome.storage.local.set({ darkMode: isDark });
   };
-  chrome.storage.local.get(['darkMode'], (res) => applyPopupTheme(res.darkMode || false));
+  chrome.storage.local.get(['darkMode'], (res) => {
+    const isDarkDefault = res.darkMode === undefined ? true : res.darkMode;
+    applyPopupTheme(isDarkDefault);
+  });
   themeToggle.onclick = () => applyPopupTheme(!document.documentElement.classList.contains('dark'));
 
   // --- View Toggle Logic ---
@@ -87,11 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       emptyState.classList.add('hidden');
 
-      // Calculate Diff
       currentNewChunks = active.filter(c => !sessionSeen.includes(c));
-      const historyChunks = active.filter(c => sessionSeen.includes(c));
+      currentHistoryChunks = active.filter(c => sessionSeen.includes(c));
 
-      // Render Newly Added
       if (currentNewChunks.length > 0) {
         newContainer.classList.remove('hidden');
         newCount.innerText = currentNewChunks.length;
@@ -100,32 +106,31 @@ document.addEventListener('DOMContentLoaded', () => {
         newContainer.classList.add('hidden');
       }
 
-      // Render History
-      if (historyChunks.length > 0) {
+      if (currentHistoryChunks.length > 0) {
         historyContainer.classList.remove('hidden');
-        historyCount.innerText = historyChunks.length;
-        historyList.innerHTML = generatePills(historyChunks, false);
+        historyCount.innerText = currentHistoryChunks.length;
+        historyList.innerHTML = generatePills(currentHistoryChunks, false);
       } else {
         historyContainer.classList.add('hidden');
       }
     });
   };
 
-  // --- Button Actions ---
+  // --- Button Actions (Live View) ---
   
   // 1. Copy ONLY Newly Added
-  document.getElementById('copy-new').onclick = (e) => {
+  const btnCopyNew = document.getElementById('copy-new');
+  btnCopyNew.onclick = () => {
     if (currentNewChunks.length === 0) return;
-    navigator.clipboard.writeText(currentNewChunks.toSorted().join(',')).then(() => {
-      const btn = e.currentTarget;
-      const originalHTML = btn.innerHTML;
-      btn.innerHTML = iconCheck; // <-- Updated here
-      setTimeout(() => btn.innerHTML = originalHTML, 1000);
+    navigator.clipboard.writeText([...currentNewChunks].sort().join(',')).then(() => {
+      btnCopyNew.innerHTML = iconCheck;
+      setTimeout(() => { btnCopyNew.innerHTML = iconCopy; }, 1000);
     });
   };
 
-  // Save Newly Added Feature
-  document.getElementById('save-new').onclick = (e) => {
+  // 2. Save Newly Added 
+  const btnSaveNew = document.getElementById('save-new');
+  btnSaveNew.onclick = () => {
     if (currentNewChunks.length === 0) return;
     const listName = prompt("Enter a display name for these chunks:");
     if (!listName) return;
@@ -137,16 +142,45 @@ document.addEventListener('DOMContentLoaded', () => {
         name: listName,
         chunks: [...currentNewChunks].sort()
       });
-      
       chrome.storage.local.set({ [GLOBAL_SAVED_KEY]: savedLists }, () => {
-        const btn = e.currentTarget;
-        const originalHTML = btn.innerHTML;
-        btn.innerHTML = iconCheck; // <-- Updated here
-        setTimeout(() => btn.innerHTML = originalHTML, 1000);
+        btnSaveNew.innerHTML = iconCheck;
+        setTimeout(() => { btnSaveNew.innerHTML = iconSave; }, 1000);
       });
     });
   };
 
+  // 3. Copy History
+  const btnCopyHistory = document.getElementById('copy-history');
+  btnCopyHistory.onclick = () => {
+    if (currentHistoryChunks.length === 0) return;
+    navigator.clipboard.writeText([...currentHistoryChunks].sort().join(',')).then(() => {
+      btnCopyHistory.innerHTML = iconCheck;
+      setTimeout(() => { btnCopyHistory.innerHTML = iconCopy; }, 1000);
+    });
+  };
+
+  // 4. Save History
+  const btnSaveHistory = document.getElementById('save-history');
+  btnSaveHistory.onclick = () => {
+    if (currentHistoryChunks.length === 0) return;
+    const listName = prompt("Enter a display name for these chunks:");
+    if (!listName) return;
+
+    chrome.storage.local.get([GLOBAL_SAVED_KEY], (res) => {
+      const savedLists = res[GLOBAL_SAVED_KEY] || [];
+      savedLists.unshift({
+        id: Date.now().toString(),
+        name: listName,
+        chunks: [...currentHistoryChunks].sort()
+      });
+      chrome.storage.local.set({ [GLOBAL_SAVED_KEY]: savedLists }, () => {
+        btnSaveHistory.innerHTML = iconCheck;
+        setTimeout(() => { btnSaveHistory.innerHTML = iconSave; }, 1000);
+      });
+    });
+  };
+
+  // 5. Copy ALL & Clear ALL
   document.getElementById('copy').onclick = async () => {
     const origin = await getActiveOrigin();
     chrome.storage.local.get([`${STORAGE_KEY}-${origin}`], (res) => {
@@ -168,10 +202,12 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.runtime.sendMessage({ type: "CLEAR", payload: { origin } }, () => {
       sessionSeen = []; 
       currentNewChunks = [];
+      currentHistoryChunks = []; 
       update();
     });
   };
 
+  // --- Saved View Manager Logic ---
   // --- Saved View Manager Logic ---
   const renderSavedLists = () => {
     chrome.storage.local.get([GLOBAL_SAVED_KEY], (res) => {
@@ -182,14 +218,19 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       savedListContainer.innerHTML = lists.map(list => `
-        <div class="border border-custom rounded-md p-3 flex flex-col gap-2 bg-zinc-50 dark:bg-[#ffffff08]">
-          <div class="flex items-center justify-between border-b border-custom pb-2">
-            <span class="text-xs font-semibold text-teal-600 dark:text-teal-400">
-              ${list.name} <span class="opacity-70 font-normal text-foreground">(${list.chunks.length})</span>
-            </span>
-            <div class="flex gap-1">
+        <div class="border border-custom rounded-md p-2 flex flex-col bg-zinc-50 dark:bg-[#ffffff08]">
+          
+          <div class="flex items-center justify-between cursor-pointer action-toggle" data-id="${list.id}">
+            <div class="flex items-center gap-1 overflow-hidden">
+              <svg class="w-3.5 h-3.5 transition-transform chevron-icon text-zinc-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+              <span class="text-xs font-semibold text-teal-600 dark:text-teal-400 whitespace-nowrap overflow-hidden text-ellipsis">
+                ${list.name} <span class="opacity-70 font-normal text-foreground">(${list.chunks.length})</span>
+              </span>
+            </div>
+            
+            <div class="flex gap-1 shrink-0 ml-2" onclick="event.stopPropagation()">
               <button class="btn-icon p-1 action-copy" data-id="${list.id}" title="Copy">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                ${iconCopy}
               </button>
               <button class="btn-icon p-1 action-edit" data-id="${list.id}" title="Rename">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
@@ -199,23 +240,44 @@ document.addEventListener('DOMContentLoaded', () => {
               </button>
             </div>
           </div>
-          <div class="flex flex-wrap gap-1 max-h-[46px] overflow-hidden relative">
-            ${list.chunks.slice(0, 5).map(c => `<span class="chunk-pill opacity-70">${c}</span>`).join('')}
-            ${list.chunks.length > 5 ? `<span class="text-[10px] opacity-70 italic ml-1 mt-1">+${list.chunks.length - 5} more</span>` : ''}
+
+          <div class="chunks-container hidden border-t border-custom mt-2 pt-2" id="chunks-${list.id}">
+            <div class="scroll-container" style="height: auto; max-height: 85px; padding: 2px 4px 2px 0; background: transparent; border: none;">
+              <div class="flex flex-wrap gap-1">
+                ${list.chunks.map(c => `<span class="chunk-pill opacity-70">${c}</span>`).join('')}
+              </div>
+            </div>
           </div>
+
         </div>
       `).join('');
 
-      // Attach Listeners to Generated Buttons
+      // --- Attach Listeners to Accordion Toggles ---
+      document.querySelectorAll('.action-toggle').forEach(header => {
+        header.onclick = () => {
+          const id = header.getAttribute('data-id');
+          const container = document.getElementById(`chunks-${id}`);
+          const chevron = header.querySelector('.chevron-icon');
+          
+          container.classList.toggle('hidden');
+          if (container.classList.contains('hidden')) {
+            chevron.classList.remove('rotate-90');
+          } else {
+            chevron.classList.add('rotate-90');
+          }
+        };
+      });
+
+      // --- Attach Listeners to Saved Manager Buttons ---
       document.querySelectorAll('.action-copy').forEach(btn => {
         btn.onclick = (e) => {
-          const id = e.currentTarget.getAttribute('data-id');
+          e.stopPropagation();
+          const id = btn.getAttribute('data-id');
           const targetList = lists.find(l => l.id === id);
           if (targetList) {
             navigator.clipboard.writeText(targetList.chunks.join(',')).then(() => {
-              const originalHTML = e.currentTarget.innerHTML;
-              e.currentTarget.innerHTML = iconCheck; // <-- Updated here
-              setTimeout(() => e.currentTarget.innerHTML = originalHTML, 1000);
+              btn.innerHTML = iconCheck;
+              setTimeout(() => { btn.innerHTML = iconCopy; }, 1000);
             });
           }
         };
@@ -223,7 +285,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       document.querySelectorAll('.action-edit').forEach(btn => {
         btn.onclick = (e) => {
-          const id = e.currentTarget.getAttribute('data-id');
+          e.stopPropagation();
+          const id = btn.getAttribute('data-id');
           const targetIndex = lists.findIndex(l => l.id === id);
           if (targetIndex !== -1) {
             const newName = prompt("Rename list:", lists[targetIndex].name);
@@ -237,7 +300,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       document.querySelectorAll('.action-delete').forEach(btn => {
         btn.onclick = (e) => {
-          const id = e.currentTarget.getAttribute('data-id');
+          e.stopPropagation();
+          const id = btn.getAttribute('data-id');
           if (confirm("Delete this saved list?")) {
             const updatedLists = lists.filter(l => l.id !== id);
             chrome.storage.local.set({ [GLOBAL_SAVED_KEY]: updatedLists }, renderSavedLists);

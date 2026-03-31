@@ -207,3 +207,15 @@ body {
 .animate-pulse { 
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; 
 }
+
+/* --- Accordion & Layout Utilities --- */
+.cursor-pointer { cursor: pointer; }
+.transition-transform { transition: transform 0.2s ease-in-out; }
+.rotate-90 { transform: rotate(90deg); }
+.shrink-0 { flex-shrink: 0; }
+.ml-2 { margin-left: 8px; }
+.mt-2 { margin-top: 8px; }
+.pt-2 { padding-top: 8px; }
+.whitespace-nowrap { white-space: nowrap; }
+.text-ellipsis { text-overflow: ellipsis; }
+.overflow-hidden { overflow: hidden; }

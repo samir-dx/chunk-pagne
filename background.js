@@ -11,7 +11,7 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
     
     chrome.storage.local.set({ 
       [`${STORAGE_KEY}-${origin}`]: [], 
-      [`seenChunks-${origin}`]: [] 
+      [`seenChunks-${origin}`]: [],
     });
   }
 }, { url: [{ hostContains: 'sprinklr.com' }] });
