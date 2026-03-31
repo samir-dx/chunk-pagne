@@ -1,7 +1,7 @@
 const STORAGE_KEY = 'network-chunks-v2';
 let originToUrls = new Map();
 
-
+// init
 chrome.webNavigation.onBeforeNavigate.addListener((details) => {
   if (details.frameId === 0) {
     const origin = new URL(details.url).origin;
@@ -17,7 +17,7 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
 }, { url: [{ hostContains: 'sprinklr.com' }] });
 
 
-// 2. Intercept and isolate by Origin
+// intercept per origin
 chrome.webRequest.onBeforeRequest.addListener(
   (details) => {
     const match = details.url.match(/_next\/static\/chunks\/([a-zA-Z-]*)\./);
@@ -53,7 +53,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     originToUrls.set(origin, new Set());
     chrome.action.setBadgeText({ text: '' });
     
-    // Clear both active and seen
+    // clear all chunks for the origin
     chrome.storage.local.set({ 
       [`${STORAGE_KEY}-${origin}`]: [],
       [`seenChunks-${origin}`]: [] 

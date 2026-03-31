@@ -3,19 +3,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeIcon = document.getElementById('theme-icon');
   
   // Containers
-  const liveView = document.getElementById('live-view');
-  const savedView = document.getElementById('saved-view');
-  const viewToggle = document.getElementById('view-toggle');
-  const viewIcon = document.getElementById('view-icon');
+  const liveViewEl = document.getElementById('live-view');
+  const savedViewEl = document.getElementById('saved-view');
+  const viewToggleEl = document.getElementById('view-toggle');
+  const viewIconEl = document.getElementById('view-icon');
   
-  const emptyState = document.getElementById('empty-state');
-  const newContainer = document.getElementById('newly-added-container');
-  const historyContainer = document.getElementById('history-container');
-  const newList = document.getElementById('new-list');
-  const historyList = document.getElementById('history-list');
-  const newCount = document.getElementById('new-count');
-  const historyCount = document.getElementById('history-count');
-  const savedListContainer = document.getElementById('saved-list-container');
+  const emptyStateEl = document.getElementById('empty-state');
+  const newContainerEl = document.getElementById('newly-added-container');
+  const historyContainerEl = document.getElementById('history-container');
+  const newListEl = document.getElementById('new-list');
+  const historyListEl = document.getElementById('history-list');
+  const newCountEl = document.getElementById('new-count');
+  const historyCountEl = document.getElementById('history-count');
+  const savedListContainerEl = document.getElementById('saved-list-container');
 
   const STORAGE_KEY = 'network-chunks-v2';
   const GLOBAL_SAVED_KEY = 'saved-chunk-lists';
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const iconCopy = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>`;
   const iconSave = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>`;
   
-  // --- Theme Logic ---
+  // theme toggle
   const applyPopupTheme = (isDark) => {
     document.documentElement.classList.toggle('dark', isDark);
     themeIcon.innerHTML = isDark ? iconSun : iconMoon;
@@ -48,24 +48,24 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   themeToggle.onclick = () => applyPopupTheme(!document.documentElement.classList.contains('dark'));
 
-  // --- View Toggle Logic ---
-  viewToggle.onclick = () => {
+  // view toggle
+  viewToggleEl.onclick = () => {
     isSavedView = !isSavedView;
     if (isSavedView) {
-      liveView.classList.add('hidden');
-      savedView.classList.remove('hidden');
-      viewIcon.innerHTML = iconActivity;
-      viewToggle.setAttribute('title', 'View Live Chunks');
+      liveViewEl.classList.add('hidden');
+      savedViewEl.classList.remove('hidden');
+      viewIconEl.innerHTML = iconActivity;
+      viewToggleEl.setAttribute('title', 'View Live Chunks');
       renderSavedLists();
     } else {
-      savedView.classList.add('hidden');
-      liveView.classList.remove('hidden');
-      viewIcon.innerHTML = iconBookmark;
-      viewToggle.setAttribute('title', 'View Saved Lists');
+      savedViewEl.classList.add('hidden');
+      liveViewEl.classList.remove('hidden');
+      viewIconEl.innerHTML = iconBookmark;
+      viewToggleEl.setAttribute('title', 'View Saved Lists');
     }
   };
 
-  // --- Origin Helper ---
+  // origin
   const getActiveOrigin = async () => {
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     return tabs.length > 0 && tabs[0].url ? new URL(tabs[0].url).origin : 'INITIATOR';
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return chunks.toReversed().map(c => `<span class="chunk-pill ${extraClass}">${c}</span>`).join('');
   };
 
-  // --- Main Update Logic (Live View) ---
+  // update live chunks view
   const update = async () => {
     const origin = await getActiveOrigin();
     const storageKey = `${STORAGE_KEY}-${origin}`;
@@ -88,49 +88,49 @@ document.addEventListener('DOMContentLoaded', () => {
       chrome.storage.local.set({ [seenKey]: active });
 
       if (active.length === 0) {
-        emptyState.classList.remove('hidden');
-        newContainer.classList.add('hidden');
-        historyContainer.classList.add('hidden');
+        emptyStateEl.classList.remove('hidden');
+        newContainerEl.classList.add('hidden');
+        historyContainerEl.classList.add('hidden');
         return;
       }
-      emptyState.classList.add('hidden');
+      emptyStateEl.classList.add('hidden');
 
       currentNewChunks = active.filter(c => !sessionSeen.includes(c));
       currentHistoryChunks = active.filter(c => sessionSeen.includes(c));
 
       if (currentNewChunks.length > 0) {
-        newContainer.classList.remove('hidden');
-        newCount.innerText = currentNewChunks.length;
-        newList.innerHTML = generatePills(currentNewChunks, true);
+        newContainerEl.classList.remove('hidden');
+        newCountEl.innerText = currentNewChunks.length;
+        newListEl.innerHTML = generatePills(currentNewChunks, true);
       } else {
-        newContainer.classList.add('hidden');
+        newContainerEl.classList.add('hidden');
       }
 
       if (currentHistoryChunks.length > 0) {
-        historyContainer.classList.remove('hidden');
-        historyCount.innerText = currentHistoryChunks.length;
-        historyList.innerHTML = generatePills(currentHistoryChunks, false);
+        historyContainerEl.classList.remove('hidden');
+        historyCountEl.innerText = currentHistoryChunks.length;
+        historyListEl.innerHTML = generatePills(currentHistoryChunks, false);
       } else {
-        historyContainer.classList.add('hidden');
+        historyContainerEl.classList.add('hidden');
       }
     });
   };
 
-  // --- Button Actions (Live View) ---
+  // button actions
   
-  // 1. Copy ONLY Newly Added
-  const btnCopyNew = document.getElementById('copy-new');
-  btnCopyNew.onclick = () => {
+  //copy newly added
+  const btnCopyNewEl = document.getElementById('copy-new');
+  btnCopyNewEl.onclick = () => {
     if (currentNewChunks.length === 0) return;
     navigator.clipboard.writeText([...currentNewChunks].sort().join(',')).then(() => {
-      btnCopyNew.innerHTML = iconCheck;
-      setTimeout(() => { btnCopyNew.innerHTML = iconCopy; }, 1000);
+      btnCopyNewEl.innerHTML = iconCheck;
+      setTimeout(() => { btnCopyNewEl.innerHTML = iconCopy; }, 1000);
     });
   };
 
-  // 2. Save Newly Added 
-  const btnSaveNew = document.getElementById('save-new');
-  btnSaveNew.onclick = () => {
+  // save newly added
+  const btnSaveNewEl = document.getElementById('save-new');
+  btnSaveNewEl.onclick = () => {
     if (currentNewChunks.length === 0) return;
     const listName = prompt("Enter a display name for these chunks:");
     if (!listName) return;
@@ -143,25 +143,25 @@ document.addEventListener('DOMContentLoaded', () => {
         chunks: [...currentNewChunks].sort()
       });
       chrome.storage.local.set({ [GLOBAL_SAVED_KEY]: savedLists }, () => {
-        btnSaveNew.innerHTML = iconCheck;
-        setTimeout(() => { btnSaveNew.innerHTML = iconSave; }, 1000);
+        btnSaveNewEl.innerHTML = iconCheck;
+        setTimeout(() => { btnSaveNewEl.innerHTML = iconSave; }, 1000);
       });
     });
   };
 
-  // 3. Copy History
-  const btnCopyHistory = document.getElementById('copy-history');
-  btnCopyHistory.onclick = () => {
+  // copy history
+  const btnCopyHistoryEl = document.getElementById('copy-history');
+  btnCopyHistoryEl.onclick = () => {
     if (currentHistoryChunks.length === 0) return;
     navigator.clipboard.writeText([...currentHistoryChunks].sort().join(',')).then(() => {
-      btnCopyHistory.innerHTML = iconCheck;
-      setTimeout(() => { btnCopyHistory.innerHTML = iconCopy; }, 1000);
+      btnCopyHistoryEl.innerHTML = iconCheck;
+      setTimeout(() => { btnCopyHistoryEl.innerHTML = iconCopy; }, 1000);
     });
   };
 
-  // 4. Save History
-  const btnSaveHistory = document.getElementById('save-history');
-  btnSaveHistory.onclick = () => {
+  // save history
+  const btnSaveHistoryEl = document.getElementById('save-history');
+  btnSaveHistoryEl.onclick = () => {
     if (currentHistoryChunks.length === 0) return;
     const listName = prompt("Enter a display name for these chunks:");
     if (!listName) return;
@@ -174,24 +174,24 @@ document.addEventListener('DOMContentLoaded', () => {
         chunks: [...currentHistoryChunks].sort()
       });
       chrome.storage.local.set({ [GLOBAL_SAVED_KEY]: savedLists }, () => {
-        btnSaveHistory.innerHTML = iconCheck;
-        setTimeout(() => { btnSaveHistory.innerHTML = iconSave; }, 1000);
+        btnSaveHistoryEl.innerHTML = iconCheck;
+        setTimeout(() => { btnSaveHistoryEl.innerHTML = iconSave; }, 1000);
       });
     });
   };
 
-  // 5. Copy ALL & Clear ALL
-  document.getElementById('copy').onclick = async () => {
+  // footer ctas
+  const footerCopyBtnEl = document.getElementById('copy');
+  footerCopyBtnEl.onclick = async () => {
     const origin = await getActiveOrigin();
     chrome.storage.local.get([`${STORAGE_KEY}-${origin}`], (res) => {
       const text = (res[`${STORAGE_KEY}-${origin}`] || []).toSorted().join(',');
       navigator.clipboard.writeText(text).then(() => {
-        const btn = document.getElementById('copy');
-        btn.innerText = 'Copied!';
-        btn.classList.replace('bg-teal-600', 'bg-emerald-600');
+        footerCopyBtnEl.innerText = 'Copied!';
+        footerCopyBtnEl.classList.replace('bg-teal-600', 'bg-emerald-600');
         setTimeout(() => {
-          btn.innerText = 'Copy All';
-          btn.classList.replace('bg-emerald-600', 'bg-teal-600');
+          footerCopyBtnEl.innerText = 'Copy All';
+          footerCopyBtnEl.classList.replace('bg-emerald-600', 'bg-teal-600');
         }, 1000);
       });
     });
@@ -207,17 +207,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // --- Saved View Manager Logic ---
-  // --- Saved View Manager Logic ---
+  // bookmark view
   const renderSavedLists = () => {
     chrome.storage.local.get([GLOBAL_SAVED_KEY], (res) => {
       const lists = res[GLOBAL_SAVED_KEY] || [];
       if (lists.length === 0) {
-        savedListContainer.innerHTML = `<p class="text-zinc-400 text-xs italic w-full text-center py-8">No saved lists yet</p>`;
+        savedListContainerEl.innerHTML = `<p class="text-zinc-400 text-xs italic w-full text-center py-8">No saved lists yet</p>`;
         return;
       }
 
-      savedListContainer.innerHTML = lists.map(list => `
+      savedListContainerEl.innerHTML = lists.map(list => `
         <div class="border border-custom rounded-md p-2 flex flex-col bg-zinc-50 dark:bg-[#ffffff08]">
           
           <div class="flex items-center justify-between cursor-pointer action-toggle" data-id="${list.id}">
@@ -252,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `).join('');
 
-      // --- Attach Listeners to Accordion Toggles ---
+      // bookmark list toggles
       document.querySelectorAll('.action-toggle').forEach(header => {
         header.onclick = () => {
           const id = header.getAttribute('data-id');
@@ -268,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
       });
 
-      // --- Attach Listeners to Saved Manager Buttons ---
+      // bookmark list actions
       document.querySelectorAll('.action-copy').forEach(btn => {
         btn.onclick = (e) => {
           e.stopPropagation();
@@ -311,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // --- Real-time Sync ---
+  // sync realtime updates
   chrome.runtime.onMessage.addListener(async (request) => {
     if (request.action === "chunksUpdated" && request.origin === await getActiveOrigin() && !isSavedView) {
       update();
