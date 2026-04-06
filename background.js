@@ -96,6 +96,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // Fallback for Tab Updates
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  // navigating away in the same tab
+  if (changeInfo.url && !changeInfo.url.includes('sprinklr.com')) {
+    if (syncTimers.has(tabId)) clearTimeout(syncTimers.get(tabId));
+    tabToUrls.delete(tabId);
+    chrome.action.setBadgeText({ text: '', tabId: tabId });
+    chrome.storage.local.remove([`${STORAGE_KEY}-${tabId}`, `seenChunks-${tabId}`]);
+    return; 
+  }
+
   if (changeInfo.status === 'complete' && tab.url && tab.url.includes('sprinklr.com')) {
     const urls = tabToUrls.get(tabId);
     if (urls && urls.size > 0) {
