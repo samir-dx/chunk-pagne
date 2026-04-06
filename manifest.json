@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Track Network Chunks",
-  "version": "3.0",
-  "description": "Tracks Next.js chunks from Sprinklr network traffic",
+  "version": "1.0",
+  "description": "Tracks Next.js chunks from network traffic",
   "permissions": [
     "webRequest", 
     "storage",
