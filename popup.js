@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const historyCountEl = document.getElementById('history-count');
   const savedListContainerEl = document.getElementById('saved-list-container');
 
+  const masterSwitchEl = document.getElementById('master-switch');
+
   const STORAGE_KEY = 'network-chunks-v2';
   const GLOBAL_SAVED_KEY = 'saved-chunk-lists';
   
@@ -43,11 +45,24 @@ document.addEventListener('DOMContentLoaded', () => {
     themeIcon.innerHTML = isDark ? iconSun : iconMoon;
     chrome.storage.local.set({ darkMode: isDark });
   };
-  chrome.storage.local.get(['darkMode'], (res) => {
+  chrome.storage.local.get(['darkMode', 'isMasterEnabled'], (res) => {
     const isDarkDefault = res.darkMode === undefined ? true : res.darkMode;
     applyPopupTheme(isDarkDefault);
+    masterSwitchEl.checked = res.isMasterEnabled !== false;
   });
   themeToggle.onclick = () => applyPopupTheme(!document.documentElement.classList.contains('dark'));
+
+  // -- Global switch logic ---
+  masterSwitchEl.addEventListener('change', (e) => {
+    const isEnabled = e.target.checked;
+    chrome.storage.local.set({ isMasterEnabled: isEnabled });
+    
+    if (isEnabled) {
+      originDisplay.style.opacity = '1';
+    } else {
+      originDisplay.style.opacity = '0.4';
+    }
+  });
 
   // --- View Toggle Logic ---
   viewToggleEl.onclick = () => {
@@ -222,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="flex items-center justify-between cursor-pointer action-toggle" data-id="${list.id}">
             <div class="flex items-center gap-1 overflow-hidden">
               <svg class="w-3.5 h-3.5 transition-transform chevron-icon text-zinc-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-              <span class="text-xs font-semibold text-teal-600 dark:text-teal-400 whitespace-nowrap overflow-hidden text-ellipsis">
+              <span title=${list.name} class="text-xs font-semibold text-teal-600 dark:text-teal-400 whitespace-nowrap overflow-hidden text-ellipsis">
                 ${list.name} <span class="opacity-70 font-normal text-foreground">(${list.chunks.length})</span>
               </span>
               ${originTag}

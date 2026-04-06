@@ -1,6 +1,21 @@
 const STORAGE_KEY = 'network-chunks-v2';
 let tabToUrls = new Map();
 let syncTimers = new Map();
+let isMasterEnabled = true;
+
+// Load setting on boot
+chrome.storage.local.get(['isMasterEnabled'], (res) => {
+  if (res.isMasterEnabled !== undefined) {
+    isMasterEnabled = res.isMasterEnabled;
+  }
+});
+
+// Listen for toggle changes from the popup
+chrome.storage.onChanged.addListener((changes) => {
+  if (changes.isMasterEnabled) {
+    isMasterEnabled = changes.isMasterEnabled.newValue;
+  }
+});
 
 // Debounced Tab Sync
 function debouncedSync(tabId) {
@@ -40,6 +55,8 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
 chrome.webRequest.onBeforeRequest.addListener(
   (details) => {
     if (details.tabId === -1) return; // Ignore background system requests
+
+    if (!isMasterEnabled) return; //global switch
 
     const match = details.url.match(/_next\/static\/chunks\/([a-zA-Z-]*)\./);
     if (match && match[1]) {
