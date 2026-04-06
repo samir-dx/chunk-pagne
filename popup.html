@@ -5,16 +5,14 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="p-4">
-  <header class="flex items-center justify-between mb-4 pb-3 border-b border-custom">
+  <header class="flex items-center justify-between mb-2 pb-3 border-b border-custom">
     <div class="flex items-center gap-2">
       <img src="https://raw.githubusercontent.com/samir-dx/store/refs/heads/main/images/chunks-logo.png" class="logo-icon" alt="logo">
       <h1 class="text-sm font-semibold tracking-tight text-teal-600 dark:text-teal-400">Network Chunks</h1>
     </div>
     <div class="flex items-center gap-1">
       <button id="view-toggle" class="btn-icon" title="View Saved Lists">
-        <svg id="view-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-        </svg>
+        <svg id="view-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
       </button>
       <button id="theme-toggle" class="btn-icon">
         <svg id="theme-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg>
@@ -22,9 +20,11 @@
     </div>
   </header>
 
+  <p id="current-origin-display" class="text-[10px] text-zinc-400 font-mono mb-4 px-1 truncate hidden"></p>
+
   <div id="live-view">
     <div id="empty-state" class="hidden">
-      <p class="text-zinc-400 text-xs italic w-full text-center py-8">No chunks captured for this origin</p>
+      <p class="text-zinc-400 text-xs italic w-full text-center py-8">No chunks captured for this tab</p>
     </div>
 
     <div id="newly-added-container" class="hidden mb-4">

@@ -219,3 +219,13 @@ body {
 .whitespace-nowrap { white-space: nowrap; }
 .text-ellipsis { text-overflow: ellipsis; }
 .overflow-hidden { overflow: hidden; }
+.font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bg-zinc-200 { background-color: #e4e4e7; }
+.text-zinc-500 { color: #71717a; }
+.px-1 { padding-left: 4px; padding-right: 4px; }
+.px-1\.5 { padding-left: 6px; padding-right: 6px; }
+.py-\[1px\] { padding-top: 1px; padding-bottom: 1px; }
+.rounded { border-radius: 4px; }
+.max-w-\[82px\] { max-width: 82px; }
+.dark .dark\:bg-zinc-800 { background-color: #27272a; }
