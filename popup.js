@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       savedListContainerEl.innerHTML = lists.map(list => {
-        const originTag = list.origin ? `<span title=${list.origin.replace('https://', '')} class="text-[9px] px-1.5 py-[1px] bg-zinc-200 dark:bg-zinc-800 rounded text-zinc-500 max-w-[82px] truncate ml-2 shrink-0">${list.origin.replace('https://', '')}</span>` : '';
+        const originTag = list.origin ? `<span title=${list.origin.replace('https://', '')} class="text-[9px] px-1.5 py-[1px] bg-zinc-200 dark:bg-zinc-800 rounded text-zinc-500 max-w-[100px] truncate ml-2 shrink-0">${list.origin.replace('https://', '')}</span>` : '';
         
         return `
         <div class="border border-custom rounded-md p-2 flex flex-col bg-zinc-50 dark:bg-[#ffffff08]">

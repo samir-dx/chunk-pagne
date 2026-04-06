@@ -17,7 +17,7 @@
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  width: 350px;
+  width: 448px;
   margin: 0;
   font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
@@ -227,7 +227,7 @@ body {
 .px-1\.5 { padding-left: 6px; padding-right: 6px; }
 .py-\[1px\] { padding-top: 1px; padding-bottom: 1px; }
 .rounded { border-radius: 4px; }
-.max-w-\[82px\] { max-width: 82px; }
+.max-w-\[100px\] { max-width: 100px; }
 .dark .dark\:bg-zinc-800 { background-color: #27272a; }
 /* --- Toggle Switch Settings --- */
 .switch { position: relative; display: inline-block; width: 28px; height: 16px; margin-top: 2px;}
