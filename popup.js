@@ -2,22 +2,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeToggle = document.getElementById('theme-toggle');
   const themeIcon = document.getElementById('theme-icon');
   
-  // Containers
+  const newContainerEl = document.getElementById('newly-added-container');
+  const historyContainerEl = document.getElementById('history-container');
+  const savedListContainerEl = document.getElementById('saved-list-container');
+  const newListEl = document.getElementById('new-list');
+  const historyListEl = document.getElementById('history-list');
   const liveViewEl = document.getElementById('live-view');
   const savedViewEl = document.getElementById('saved-view');
   const viewToggleEl = document.getElementById('view-toggle');
   const viewIconEl = document.getElementById('view-icon');
   const originDisplay = document.getElementById('current-origin-display');
-  
   const emptyStateEl = document.getElementById('empty-state');
-  const newContainerEl = document.getElementById('newly-added-container');
-  const historyContainerEl = document.getElementById('history-container');
-  const newListEl = document.getElementById('new-list');
-  const historyListEl = document.getElementById('history-list');
   const newCountEl = document.getElementById('new-count');
   const historyCountEl = document.getElementById('history-count');
-  const savedListContainerEl = document.getElementById('saved-list-container');
-
   const masterSwitchEl = document.getElementById('master-switch');
 
   const STORAGE_KEY = 'network-chunks-v2';
@@ -30,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeTabId = -1;
   let activeOrigin = '';
 
-  // Icons
+  // icons
   const iconMoon = `<path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>`;
   const iconSun = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>`;
   const iconBookmark = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>`;
@@ -38,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const iconCheck = `<svg class="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
   const iconCopy = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>`;
   
-  // --- Theme Logic ---
+  // theme management
   const applyPopupTheme = (isDark) => {
     document.documentElement.classList.toggle('dark', isDark);
     themeIcon.innerHTML = isDark ? iconSun : iconMoon;
@@ -51,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   themeToggle.onclick = () => applyPopupTheme(!document.documentElement.classList.contains('dark'));
 
-  // -- Global switch logic ---
+  // global switch
   masterSwitchEl.addEventListener('change', (e) => {
     const isEnabled = e.target.checked;
     chrome.storage.local.set({ isMasterEnabled: isEnabled });
@@ -63,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- View Toggle Logic ---
+  // view toggle
   viewToggleEl.onclick = () => {
     isSavedView = !isSavedView;
     if (isSavedView) {
@@ -82,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // --- Initialize Context ---
+  // initialization
   const initContext = async () => {
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tabs.length > 0) {
@@ -102,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return chunks.toReversed().map(c => `<span class="chunk-pill ${extraClass}">${c}</span>`).join('');
   };
 
-  // --- Main Update Logic (Live View) ---
+  // chunks live update
   const update = async () => {
     if (activeTabId === -1) return;
     const storageKey = `${STORAGE_KEY}-${activeTabId}`;
@@ -142,8 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // --- Button Actions (Live View) ---
-  
+  // save to list
   const saveToList = (chunks, btn) => {
     const listName = prompt("Enter a display name for these chunks:");
     if (!listName) return;
@@ -164,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
+  //newly loaded handlers
   const btnCopyNewEl = document.getElementById('copy-new');
   btnCopyNewEl.onclick = (e) => {
     if (currentNewChunks.length === 0) return;
@@ -178,6 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
   saveBtnEl.onclick = () => {
     if (currentNewChunks.length > 0) saveToList(currentNewChunks, saveBtnEl);
   };
+
+  //history handlers
   const btnCopyHistoryEl = document.getElementById('copy-history');
   btnCopyHistoryEl.onclick = (e) => {
     if (currentHistoryChunks.length === 0) return;
@@ -188,13 +187,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-    // save history
   const btnSaveHistoryEl = document.getElementById('save-history');
   btnSaveHistoryEl.onclick = (e) => {
     if (currentHistoryChunks.length > 0) saveToList(currentHistoryChunks, btnSaveHistoryEl);
   };
 
-    // footer ctas
+  // footer cta
   const footerCopyBtnEl = document.getElementById('copy');
   footerCopyBtnEl.onclick = () => {
     chrome.storage.local.get([`${STORAGE_KEY}-${activeTabId}`], (res) => {
@@ -219,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // --- Saved View Manager Rendering ---
+  // bookmark management
   const renderSavedLists = () => {
     chrome.storage.local.get([GLOBAL_SAVED_KEY], (res) => {
       const lists = res[GLOBAL_SAVED_KEY] || [];
@@ -263,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `}).join('');
 
-      // bookmark list toggles
+      // toggle chunk
       document.querySelectorAll('.action-toggle').forEach(header => {
         header.onclick = () => {
           const id = header.getAttribute('data-id');
@@ -279,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
       });
 
-      // bookmark list actions
+      // action handler
       document.querySelectorAll('.action-copy').forEach(btn => {
         btn.onclick = (e) => {
           e.stopPropagation();
@@ -322,14 +320,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // --- Real-time Sync ---
+  // sync real-time
   chrome.runtime.onMessage.addListener((request) => {
-    // Only update if the broadcast is for THIS tab
     if (request.action === "chunksUpdated" && request.tabId === activeTabId && !isSavedView) {
       update();
     }
   });
 
-  // Start
+  // init once
   initContext();
 });
