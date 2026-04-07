@@ -1,9 +1,9 @@
-/* --- Shadcn Variables --- */
+/* variables */
 :root {
   --background: 0 0% 100%;
   --foreground: 240 10% 3.9%;
   --border: 240 5.9% 90%;
-  --primary: 171 77% 35%; /* Teal 600 */
+  --primary: 171 77% 35%; 
   --ring: 171 77% 35%;
 }
 
@@ -11,7 +11,7 @@
   --background: 240 10% 3.9%;
   --foreground: 0 0% 98%;
   --border: 240 3.7% 15.9%;
-  --primary: 171 77% 45%; /* Teal 500 */
+  --primary: 171 77% 45%; 
 }
 
 body {
@@ -22,10 +22,11 @@ body {
   font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
-/* --- Scrollable Container --- */
+/* scrollable containers */
 .scroll-container {
-  height: 200px; /* Fixed height for scrolling */
+  height: 200px; 
   overflow-y: auto;
+  scrollbar-gutter: stable;
   border: 1px solid hsl(var(--border));
   border-radius: 6px;
   padding: 10px;
@@ -41,7 +42,7 @@ body {
   background-color: #ffffff12;
 }
 
-/* --- Component Styling --- */
+/* components */
 .chunk-pill {
   background-color: hsl(var(--background));
   border: 1px solid hsl(var(--border));
@@ -110,12 +111,7 @@ body {
 .logo-icon { width: 20px; height: 20px; }
 #list { gap: 4px 8px; }
 
-
-/* =========================================
-   TAILWIND UTILITY CLASSES (Mocked)
-   ========================================= */
-
-/* Layout & Flexbox */
+/* layout */
 .flex { display: flex; }
 .flex-wrap { flex-wrap: wrap; }
 .flex-1 { flex: 1; }
@@ -126,7 +122,7 @@ body {
 .overflow-hidden { overflow: hidden; }
 .relative { position: relative; }
 
-/* Spacing (Margin & Padding) */
+/* spacing */
 .p-1 { padding: 4px; }
 .p-2 { padding: 8px; }
 .p-3 { padding: 12px; }
@@ -142,8 +138,15 @@ body {
 .gap-1 { gap: 4px; }
 .gap-2 { gap: 8px; }
 .gap-3 { gap: 12px; }
+.mr-1 { margin-right: 4px; }
+.ml-2 { margin-left: 8px; }
+.mt-2 { margin-top: 8px; }
+.pt-2 { padding-top: 8px; }
+.px-1 { padding-left: 4px; padding-right: 4px; }
+.px-1\.5 { padding-left: 6px; padding-right: 6px; }
+.py-\[1px\] { padding-top: 1px; padding-bottom: 1px; }
 
-/* Dimensions */
+/* dimensions */
 .w-1\.5 { width: 6px; }
 .h-1\.5 { height: 6px; }
 .w-3\.5 { width: 14px; }
@@ -154,7 +157,7 @@ body {
 .max-h-\[46px\] { max-height: 46px; }
 .max-h-\[140px\] { max-height: 140px; }
 
-/* Typography */
+/* typography */
 .text-xs { font-size: 12px; }
 .text-sm { font-size: 14px; }
 .text-\[10px\] { font-size: 10px; } 
@@ -166,22 +169,27 @@ body {
 .tracking-wider { letter-spacing: 0.05em; }
 .text-center { text-align: center; }
 
-/* Borders & Radius */
+/* borders */
 .border { border: 1px solid hsl(var(--border)); }
 .border-b { border-bottom: 1px solid hsl(var(--border)); }
 .border-t { border-top: 1px solid hsl(var(--border)); }
 .border-custom { border-color: hsl(var(--border)); }
 .rounded-md { border-radius: 6px; }
 .rounded-full { border-radius: 9999px; }
+.rounded { border-radius: 4px; }
 
-/* Opacity */
+/* opacity */
 .opacity-70 { opacity: 0.7; }
 .opacity-80 { opacity: 0.8; }
 
-/* Visibility */
+/* visibility */
 .hidden { display: none !important; }
+.select-none { 
+  -webkit-user-select: none;
+  user-select: none; 
+}
 
-/* Custom Colors & Themes */
+/* theme */
 .text-teal-600 { color: #1D7671; }
 .text-zinc-400 { color: #a1a1aa; }
 .text-foreground { color: hsl(var(--foreground)); }
@@ -190,16 +198,15 @@ body {
 .bg-teal-500 { background-color: #14b8a6; }
 .bg-zinc-50 { background-color: #fafafa; }
 
-/* The specific pill classes injected by popup.js */
 .border-teal-500\/50 { border-color: rgba(20, 184, 166, 0.5); }
 .bg-teal-50\/50 { background-color: rgba(240, 253, 250, 0.5); }
 
-/* Dark Mode Overrides */
+/* dark mode */
 .dark .dark\:text-teal-400 { color: #0d9488; }
 .dark .dark\:bg-teal-900\/20 { background-color: rgba(19, 78, 74, 0.2); }
 .dark .dark\:bg-\[\#ffffff08\] { background-color: #ffffff08; }
 
-/* Animations */
+/* animate */
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
@@ -208,14 +215,11 @@ body {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; 
 }
 
-/* --- Accordion & Layout Utilities --- */
+/* accordion */
 .cursor-pointer { cursor: pointer; }
 .transition-transform { transition: transform 0.2s ease-in-out; }
 .rotate-90 { transform: rotate(90deg); }
 .shrink-0 { flex-shrink: 0; }
-.ml-2 { margin-left: 8px; }
-.mt-2 { margin-top: 8px; }
-.pt-2 { padding-top: 8px; }
 .whitespace-nowrap { white-space: nowrap; }
 .text-ellipsis { text-overflow: ellipsis; }
 .overflow-hidden { overflow: hidden; }
@@ -223,23 +227,15 @@ body {
 .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bg-zinc-200 { background-color: #e4e4e7; }
 .text-zinc-500 { color: #71717a; }
-.px-1 { padding-left: 4px; padding-right: 4px; }
-.px-1\.5 { padding-left: 6px; padding-right: 6px; }
-.py-\[1px\] { padding-top: 1px; padding-bottom: 1px; }
-.rounded { border-radius: 4px; }
 .max-w-\[100px\] { max-width: 100px; }
 .dark .dark\:bg-zinc-800 { background-color: #27272a; }
-/* --- Toggle Switch Settings --- */
+
+/* toggle */
 .switch { position: relative; display: inline-block; width: 28px; height: 16px; margin-top: 2px;}
 .switch input { opacity: 0; width: 0; height: 0; }
 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #a1a1aa; transition: .2s; border-radius: 16px; }
 .slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 2px; bottom: 2px; background-color: white; transition: .2s; border-radius: 50%; }
 input:checked + .slider { background-color: hsl(var(--primary)); }
 input:checked + .slider:before { transform: translateX(12px); }
-
-/* Dark Mode Overrides for Switch */
 .dark .slider { background-color: #52525b; }
 .dark input:checked + .slider { background-color: hsl(var(--primary)); }
-
-/* Small utility margin adjustment */
-.mr-1 { margin-right: 4px; }

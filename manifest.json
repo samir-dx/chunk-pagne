@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Track Network Chunks",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Tracks Next.js chunks from network traffic",
   "permissions": [
     "webRequest", 
